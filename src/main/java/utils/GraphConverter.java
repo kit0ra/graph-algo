@@ -82,6 +82,20 @@ public class GraphConverter {
            fp[id-1]=0;
        }
        
+       for (int i=1;i<=vertices;i++){
+           ddi[i] = app[i];
+       }
+       
+       int node=1;
+       for(int i=1; i<=total;i++){
+           if(fs[i]==0){
+               node++;
+           }
+           else{
+               fp[ddi[fs[i]]++] = node;
+           }
+       }
+       
        return new int [][]{fp,app};
    }
    
