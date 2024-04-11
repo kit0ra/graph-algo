@@ -8,8 +8,8 @@ package com.mycompany.graphs;
  *
  * @author Administrator
  */
-
 import utils.GraphPrinter;
+
 
 public class Graph {
     private int[] fs;
