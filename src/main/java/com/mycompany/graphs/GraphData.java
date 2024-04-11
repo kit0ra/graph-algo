@@ -8,32 +8,32 @@ package com.mycompany.graphs;
  *
  * @author Administrator
  */
+import java.util.Arrays;
 import java.util.Map;
-import java.util.List;
 
 public class GraphData {
     private String name;
     private int vertices;
     private int edgeCount;
-    private Map<String, List<Integer>> edges;
+    private Map<String, int[]> edges;
 
     // Getters and setters
-    public String getName(){
+    public String getName() {
         return name;
     }
-    
+
     public void setName(String newName) {
-        name= newName;
+        name = newName;
     }
-    
-    public int getEdgeCount(){
+
+    public int getEdgeCount() {
         return edgeCount;
     }
-    
-    public void setEdgeCount(int n){
-        edgeCount=n;
+
+    public void setEdgeCount(int n) {
+        edgeCount = n;
     }
-    
+
     public int getVertices() {
         return vertices;
     }
@@ -42,21 +42,35 @@ public class GraphData {
         this.vertices = vertices;
     }
 
-    public Map<String, List<Integer>> getEdges() {
+    public Map<String, int[]> getEdges() { 
         return edges;
     }
 
-    public void setEdges(Map<String, List<Integer>> edges) {
+    public void setEdges(Map<String, int[]> edges) { 
         this.edges = edges;
     }
-    
+
     @Override
     public String toString() {
+        StringBuilder edgesString = new StringBuilder("{");
+        if (edges != null) {
+            for (Map.Entry<String, int[]> entry : edges.entrySet()) {
+                edgesString.append(entry.getKey())
+                            .append("=")
+                            .append(Arrays.toString(entry.getValue()))
+                            .append(", ");
+            }
+            if (!edges.isEmpty()) {
+                edgesString.setLength(edgesString.length() - 2);
+            }
+        }
+        edgesString.append("}");
+        
         return "GraphData{" +
                "name='" + name + '\'' +
                ", vertices=" + vertices +
-               ", edges=" + edges +
+               ", edgeCount=" + edgeCount +
+               ", edges=" + edgesString +
                '}';
     }
-
 }

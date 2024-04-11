@@ -9,44 +9,44 @@ package com.mycompany.graphs;
  * @author Administrator
  */
 
-import java.util.List;
 import utils.GraphPrinter;
 
 public class Graph {
-    private List<Integer> fs ;
-    private List<Integer> aps;
+    private int[] fs;
+    private int[] aps;
 
-    public Graph(List<Integer> fs , List<Integer> aps) {
-        this.fs = fs;
-        this.aps = aps;
-    }
-    
-    public List<Integer> getFS(){
-        return fs;
+    public Graph(int[] fs, int[] aps) {
+        this.fs = fs.clone();
+        this.aps = aps.clone();
     }
 
-    public void setFS(List<Integer> newFS) {
-        fs = newFS;
+    public int[] getFS() {
+        return fs.clone();
     }
-    
-     public List<Integer> getAPS(){
-        return aps;
+
+    public void setFS(int[] newFS) {
+        fs = newFS.clone();
     }
-     
-    public void setAPS(List<Integer> newAPS){
-        aps = newAPS;
-    } 
-    
+
+    public int[] getAPS() {
+        return aps.clone();
+    }
+
+    public void setAPS(int[] newAPS) {
+        aps = newAPS.clone();
+    }
+
     public int getVertices() {
-        return this.aps.get(0);
+        return this.aps[0];
     }
 
     public int getEdges() {
-        return this.fs.get(0) - getVertices();
+        return this.fs[0] - getVertices();
     }
 
     @Override
-    public String toString(){
+    public String toString() {
+        // Assuming GraphPrinter.formatFsAps is modified to accept int[] parameters
         return GraphPrinter.formatFsAps(fs, aps);
     }
 }

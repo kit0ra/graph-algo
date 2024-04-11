@@ -5,6 +5,7 @@
 package utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -12,94 +13,76 @@ import java.util.List;
  * @author Administrator
  */
 public class GraphConverter {
-    
-  public static int[][] toAdjMatrix(List<Integer> fs, List<Integer> aps) {
-    int vertices = aps.get(0); 
-    int edges = fs.get(0) - vertices; 
 
+    public static int[][] toAdjMatrix(int[] fs, int[] aps) {
+        int vertices = aps[0];
+        int total = fs[0];
+
+        // Initialize the adjacency matrix
+        int[][] matrix = new int[vertices][vertices + 1];
+
+        // First cell of matrix contains the number of vertices
+        matrix[0][0] = vertices;
+        matrix[1][0] = total;
+
+        // Populate the adjacency matrix
+        for (int i = 1; i <= vertices; i++) {
+            int start = aps[i]; // Start index in fs for the i-th vertex's successors
+            for (int j = start; fs[j] != 0; j++) { // Iterate through successors until a block separator (0) is found
+                int successor = fs[j];
+                matrix[i - 1][successor] = 1; // Mark the edge presence with 1
+            }
+        }
+
+        return matrix;
+    }
+
+    public static int[][] adjMatrixToFsAps(int[][] matrix) {
+        int vertices = matrix[0][0];
+        int total = matrix[1][0];
+        
+        int[] fs = new int[total+1]; 
+        int[] aps = new int[vertices + 1];
+        
+        fs[0] = total; // First element is the total count of fs
+        aps[0] = vertices; // First element is the count of vertices
+
+        int fsIndex = 1;
+        for (int r = 0; r < vertices; r++) {
+            aps[r + 1] = fsIndex;
+            for (int c = 1; c <= vertices; c++) {
+                if (matrix[r][c] == 1) {
+                    fs[fsIndex++] = c;
+                }
+            }
+            fs[fsIndex++] = 0; // Add separator after listing all successors
+        }
+
+        return new int[][]{fs, aps};
+    }
    
-    int[][] matrix = new int[vertices][vertices + 1];
-
-    // Initialize the adjacency matrix with 0s
-    for (int i = 0; i < vertices; i++) {
-        for (int j = 0; j <= vertices; j++) { 
-            matrix[i][j] = 0;
-        }
-    }
-
-    // Store metadata in the first column of the first two rows
-    matrix[0][0] = vertices; 
-    matrix[1][0] = edges; 
-
-    // Populate the adjacency matrix
-    for (int vertex = 1; vertex <= vertices; vertex++) {
-        int index_fs = aps.get(vertex);
-        // Populate starting from the second column to avoid overwriting metadata
-        while (index_fs < fs.size() && fs.get(index_fs) > 0) {
-            int successor = fs.get(index_fs);
-            matrix[vertex - 1][successor] = 1; // Use successor as column index directly, starting from 1
-            index_fs++;
-        }
-    }
-    return matrix;
-    }
-
-   public static List<List<Integer>> adjMatrixToFsAps(int [][] matrix){
-       int vertices = matrix[0][0];
-       int edges = matrix[1][0];
+   public static int[][] fsApsToFpApp(int[] fs, int[] aps){
+       int vertices = aps[0];
+       int total = fs[0];
        
-       List<Integer> aps = new ArrayList<>(vertices+1);
-       aps.add(vertices);
+       int[] app = new int[vertices+1];
+       int[] fp = new int[total+1];
        
-       List<Integer> fs = new ArrayList<>(vertices+edges+1);
-       fs.add(vertices+edges);
+       app[0]=vertices;
+       fp[0]=total;
        
-       int i =1;
-       for (int r=0; r<vertices;r++){
-           aps.add(i);
-           for (int c=1;c<=vertices;c++){
-               if(matrix[r][c]==1){
-                   fs.add(c);
-                   i++;
-               }
-           }
-           fs.add(i,0);
-           i++;
+       // calculate ddi
+       int [] ddi = new int [vertices + 1];
+       ddi = GraphHelpers.calculateHalfInteriorDegree(fs, aps);
+       
+       int id =1;
+       for(int i=1; i<=vertices;i++){
+           app[i] = id;
+           id +=ddi[i]+1;
+           fp[id-1]=0;
        }
        
-       List<List<Integer>> result = new ArrayList<>(2);
-       result.add(fs);
-       result.add(aps);
-       return result;
-   }
-   
-   public static List<List<Integer>> fsApsToFpApp(List<Integer> fs, List<Integer> aps){
-       int vertices = aps.get(0);
-       int total = fs.get(0);
-       
-       List<Integer> app = new ArrayList<>(vertices + 1);
-       List<Integer> fp = new ArrayList<>(total);
-       
-       app.add(vertices);
-       fp.add(total);
-       
-       List<Integer> ddi = GraphHelpers.calculateHalfInteriorDegree(fs, aps);
-       
-       int id = 1;
-       for (int i=1;i<=vertices;i++){
-           app.add(id);
-           id += ddi.get(i)+1;
-           fp.set(id-1,0);
-           //fp.set(id-1, 0);
-       }
-       
-       System.out.println("app: "+app);
-       System.out.println("fp:" +fp);
-       
-       List<List<Integer>> result = new ArrayList<>(2);
-       result.add(fp);
-       result.add(app);
-       return result;
+       return new int [][]{fp,app};
    }
    
 }

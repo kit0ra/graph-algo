@@ -15,16 +15,16 @@ import java.util.List;
 public class GraphHelpers {
     
     //Half Interior Degree(dde)
-    public static List<Integer> calculateHalfInteriorDegree(List<Integer> fs, List<Integer> aps){
-        int vertices = aps.get(0);
-        int total = fs.get(0);
-        List<Integer> ddi = new ArrayList<>(Collections.nCopies(vertices + 1, 0)); // Initialize ddi with zeros
+    public static int[] calculateHalfInteriorDegree(int[] fs, int[] aps) {
+        int vertices = aps[0];
+        int total = fs[0];
         
+        int[] ddi = new int[vertices + 1]; // Arrays are initialized with 0 by default
+
         for (int i = 1; i <= total; i++) {
-            int index = fs.get(i); // Assuming fs contains indices for ddi
-            ddi.set(index,  ddi.get(index) + 1);
+            ddi[fs[i]]++; // Increment the degree
         }
-        
+
         return ddi;
     }
     

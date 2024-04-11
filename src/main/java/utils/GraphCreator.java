@@ -8,40 +8,40 @@ package utils;
  *
  * @author Administrator
  */
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Map;
 
 import com.mycompany.graphs.Graph;
 import com.mycompany.graphs.GraphData;
 
 public class GraphCreator {
-    
+
     public static Graph createGraphFromGraphData(GraphData graphData) {
         int vertices = graphData.getVertices();
         int edges = graphData.getEdgeCount();
-        Map<String, List<Integer>> edgesMap = graphData.getEdges();
-        
-        // Prepare lists to hold fs and aps values
-        List<Integer> fsList = new ArrayList<>();
-        List<Integer> apsList = new ArrayList<>();
-        
-        // Populate fs and aps from edgesMap
-        fsList.add(vertices+edges); // Assuming the first element represents the number of vertices
-        apsList.add(vertices); // Placeholder for consistency; adjust as needed
-        
-        
-        // Start converting from the first entry
-        for (Map.Entry<String, List<Integer>> entry : edgesMap.entrySet()) {
-            apsList.add(fsList.size()); // Store the start index in fs for this entry
+        Map<String, int[]> edgesMap = graphData.getEdges();
 
-            // Add all toVertices to fs, separate entries with 0
-            for (Integer toVertex : entry.getValue()) {
-                fsList.add(toVertex);
-            }
-            fsList.add(0); // Separate each entry by 0
-        }
         
-        return new Graph(fsList, apsList);
+        int[] fs = new int[vertices + edges + 1];
+        int[] aps = new int[vertices + 1];
+
+        
+        fs[0] = vertices + edges; 
+        aps[0] = vertices; 
+        
+        int fsIndex = 1; 
+        int apsIndex = 1; 
+
+        for (Map.Entry<String, int[]> entry : edgesMap.entrySet()) {
+            aps[apsIndex++] = fsIndex; // Store the start index in fs for this vertex
+
+            
+            for (int toVertex : entry.getValue()) {
+                fs[fsIndex++] = toVertex;
+            }
+            fs[fsIndex++] = 0; 
+        }
+
+        return new Graph(fs, aps);
     }
 }
