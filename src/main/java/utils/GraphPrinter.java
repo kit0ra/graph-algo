@@ -51,5 +51,17 @@ public class GraphPrinter {
         sb.append("]");
         return sb.toString();
     }
+    
+    public static void printDistance(int [] distance){
+         for (int i = 1; i < distance.length; i++) {
+            System.out.println("Vertex " + i + " distance: " + distance[i]);
+        }
+    }
+    
+    public static void printRank(int [] rank){
+         for (int i = 1; i < rank.length; i++) {
+            System.out.println("Vertex " + i + " rank: " + rank[i]);
+        }
+    }
 }
 

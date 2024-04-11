@@ -4,12 +4,8 @@
 
 package com.mycompany.graphs;
 
-import com.mycompany.graphs.Algorithms.GraphTraversal;
+import static com.mycompany.graphs.Algorithms.GraphRank.calculateRang;
 import com.mycompany.graphs.database.DatabaseHandler;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
 import utils.GraphConverter;
 import utils.GraphCreator;
 import utils.GraphHelpers;
@@ -40,26 +36,12 @@ public class Main {
        int [] ddi = GraphHelpers.calculateHalfInteriorDegree(g.getFS(), g.getAPS());
        
        int [][]result2 = GraphConverter.fsApsToFpApp(g.getFS(), g.getAPS());
-       GraphPrinter.fpAppPrinter(result2[0], result2[1]);
+       //GraphPrinter.fpAppPrinter(result2[0], result2[1]);
         
-       //convert to fp app
-       List<Integer> fsList = new ArrayList<>(Arrays.asList(14,2,5,0,3,0,3,4,6,0,6,0,3,0,0));
-       List<Integer> apsList = new ArrayList<>(Arrays.asList(6,1,4,6,10,12,14));
-       
-         // Convert fsList to fs array
-         int[] fs = fsList.stream().mapToInt(Integer::intValue).toArray();
-
-         // Convert apsList to aps array
-         int[] aps = apsList.stream().mapToInt(Integer::intValue).toArray();
-         //GraphPrinter.fsApsPrinter(fs, aps);
-        
-         
-         
-         /*int []dist = GraphTraversal.descLarge1(fs, aps);
-         System.out.println("distance array elements:");
-         for(int i = 0; i < dist.length; i++) {
-            System.out.println("distance[" + i + "] = " + dist[i]);
-         }*/
-       //List<List<Integer>> result2 = GraphConverter.fsApsToFpApp(g.getFS(), g.getAPS());
-         }
+       //calculer le rang
+        int[] fs = {31, 2, 3, 0, 4, 9, 0, 4, 6, 8, 0, 8, 9, 11, 0, 3, 6, 0, 7, 8, 0, 8, 0, 10, 0, 0, 11, 0, 10, 12, 0, 0};
+        int[] aps = {12, 1, 4, 7, 11, 15, 18, 21, 23, 25, 26, 28, 31};
+        int[] rang = calculateRang(fs, aps);
+        GraphPrinter.printRank(rang);
+    }
 }
