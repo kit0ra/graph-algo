@@ -12,8 +12,8 @@ import utils.GraphPrinter;
 
 
 public class Graph {
-    private int[] fs;
-    private int[] aps;
+    protected int[] fs;
+    protected int[] aps;
 
     public Graph(int[] fs, int[] aps) {
         this.fs = fs.clone();
@@ -46,7 +46,6 @@ public class Graph {
 
     @Override
     public String toString() {
-        // Assuming GraphPrinter.formatFsAps is modified to accept int[] parameters
         return GraphPrinter.formatFsAps(fs, aps);
     }
 }

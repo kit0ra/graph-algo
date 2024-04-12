@@ -5,8 +5,12 @@
 package GraphInput;
 
 import com.mycompany.graphs.Graph;
+import com.mycompany.graphs.GraphData;
 import com.mycompany.graphs.WeightedGraph;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
+import utils.GraphCreator;
 
 /**
  *
@@ -15,45 +19,52 @@ import java.util.Scanner;
 
 public class GraphInputHelper {
 
-    public static Graph saisieGraphe() {
+    public static Graph createGraphFromUserInput() {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Le graphe est-il pondéré? (oui/non): ");
+        System.out.print("Le graphe a il des poids? (oui/non): ");
         boolean isWeighted = scanner.nextLine().trim().equalsIgnoreCase("oui");
 
-        // Common graph input code...
         System.out.print("Donner le nombre de sommets du graphe : ");
         int n = scanner.nextInt();
-        int[] aps = new int[n + 1];
-        aps[0] = n;
 
         System.out.print("Donner le nombre d'arcs du graphe : ");
         int m = scanner.nextInt();
         scanner.nextLine(); // Consume newline
 
-        int[] fs = new int[n + m + 1];
-        fs[0] = n + m;
-        int k = 0;
-
-        int[][] p = isWeighted ? new int[n + 1][n + 1] : null;
+        Map<Integer, int[]> edges = new HashMap<>();
+        int[][] weights = isWeighted ? new int[n + 1][n + 1] : null;
 
         for (int i = 1; i <= n; i++) {
             System.out.printf("Donner le nombre de successeurs du sommet %d : ", i);
             int ns = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
-            System.out.println("Entrer les successeurs et poids (si applicable):");
+            int[] successors = new int[ns];
 
-            for (int j = 1; j <= ns; j++) {
+            if (isWeighted) {
+                System.out.println("Entrer les successeurs et leurs poids:");
+            } else {
+                System.out.println("Entrer les successeurs:");
+            }
+
+            for (int j = 0; j < ns; j++) {
                 int succ = scanner.nextInt();
-                fs[++k] = succ;
+                successors[j] = succ;
+
                 if (isWeighted) {
                     int weight = scanner.nextInt();
-                    p[i][succ] = weight;
+                    weights[i][succ] = weight;
                 }
             }
-            fs[++k] = 0; // End marker
+
+            edges.put(i, successors);
         }
 
-        return isWeighted ? new WeightedGraph(fs, aps, p) : new Graph(fs, aps);
+        GraphData graphData = new GraphData(isWeighted, n, m, edges);
+        if (isWeighted) {
+            graphData.setWeights(weights);
+        }
+
+        // Utilize the GraphCreator method to create a graph based on the constructed GraphData
+        return GraphCreator.createGraphFromGraphData(graphData);
     }
 
 }

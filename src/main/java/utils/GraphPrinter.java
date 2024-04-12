@@ -35,7 +35,6 @@ public class GraphPrinter {
         return "FS: " + arrayToString(fs) + "\nAPS: " + arrayToString(aps);
     }
 
-    // Helper method to convert an array to a string format similar to List.toString()
     private static String arrayToString(int[] array) {
         if (array == null || array.length == 0) {
             return "[]";
