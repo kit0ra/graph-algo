@@ -19,7 +19,11 @@ public class Graph {
         this.fs = fs.clone();
         this.aps = aps.clone();
     }
-
+    
+    public boolean isWeighted() {
+        return false;
+    }
+    
     public int[] getFS() {
         return fs.clone();
     }

@@ -13,7 +13,11 @@ import utils.GraphPrinter;
 public class WeightedGraph extends Graph {
 
     private int[][] p; // Edge weights
-
+    
+    public boolean isWeighted() {
+        return true;
+    }
+    
     public WeightedGraph(int[] fs, int[] aps, int[][] p) {
         super(fs, aps);
         this.p = p.clone();
@@ -26,16 +30,15 @@ public class WeightedGraph extends Graph {
     public void setP(int[][] newP) {
         this.p = newP.clone();
     }
-
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Graph Structure (Unweighted): \n");
         sb.append(GraphPrinter.formatFsAps(fs, aps)); 
 
         // Append weights matrix if this graph is weighted
         if (p != null) {
-            sb.append("\nWeights (Adjacency Matrix):\n");
+            sb.append("\nWeights Matrix):\n");
             appendMatrixToString(sb, p);  // Append formatted weight matrix
         }
 

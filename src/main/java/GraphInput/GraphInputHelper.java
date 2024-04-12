@@ -5,7 +5,7 @@
 package GraphInput;
 
 import com.mycompany.graphs.Graph;
-import com.mycompany.graphs.GraphData;
+import graphio.GraphData;
 import com.mycompany.graphs.WeightedGraph;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +19,7 @@ import utils.GraphCreator;
 
 public class GraphInputHelper {
 
-    public static Graph createGraphFromUserInput() {
+    /*public static Graph createGraphFromUserInput() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Le graphe a il des poids? (oui/non): ");
         boolean isWeighted = scanner.nextLine().trim().equalsIgnoreCase("oui");
@@ -65,6 +65,6 @@ public class GraphInputHelper {
 
         // Utilize the GraphCreator method to create a graph based on the constructed GraphData
         return GraphCreator.createGraphFromGraphData(graphData);
-    }
+    }*/
 
 }

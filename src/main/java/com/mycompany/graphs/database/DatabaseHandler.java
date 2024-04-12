@@ -10,7 +10,7 @@ package com.mycompany.graphs.database;
  */
 
 import com.google.gson.Gson;
-import com.mycompany.graphs.GraphData;
+import graphio.GraphData;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
