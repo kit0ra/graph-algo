@@ -12,23 +12,24 @@ import utils.GraphPrinter;
  */
 public class WeightedGraph extends Graph {
 
-    private int[][] p; // Edge weights
+    private int[][] weights; // Edge weights
     
+    @Override
     public boolean isWeighted() {
         return true;
     }
     
-    public WeightedGraph(int[] fs, int[] aps, int[][] p) {
+    public WeightedGraph(int[] fs, int[] aps, int[][] weights) {
         super(fs, aps);
-        this.p = p.clone();
+        this.weights = weights.clone();
     }
 
-    public int[][] getP() {
-        return p.clone();
+    public int[][] getWeights() {
+        return weights.clone();
     }
 
-    public void setP(int[][] newP) {
-        this.p = newP.clone();
+    public void setWeights(int[][] newWeights) {
+        this.weights = newWeights.clone();
     }
     
     @Override
@@ -37,9 +38,9 @@ public class WeightedGraph extends Graph {
         sb.append(GraphPrinter.formatFsAps(fs, aps)); 
 
         // Append weights matrix if this graph is weighted
-        if (p != null) {
+        if (weights != null) {
             sb.append("\nWeights Matrix):\n");
-            appendMatrixToString(sb, p);  // Append formatted weight matrix
+            appendMatrixToString(sb, weights);  // Append formatted weight matrix
         }
 
         return sb.toString();

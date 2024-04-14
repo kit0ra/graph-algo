@@ -5,6 +5,7 @@
 package com.mycompany.graphs;
 
 import GraphInput.GraphInputHelper;
+import com.mycompany.graphs.Algorithms.Dijkstra;
 import com.mycompany.graphs.Algorithms.GraphRank;
 import com.mycompany.graphs.Algorithms.GraphTraversal;
 import graphio.GraphData;
@@ -22,7 +23,7 @@ public class Main {
     public static void main(String[] args) {
        //DatabaseHandler dbHandler = new DatabaseHandler("C://Users//Administrator//Documents//graph_db.accdb");
        //GraphData data = dbHandler.getGraphById(1);
-       //Graph g = GraphCreator.createGraphFromGraphData(data);
+       
         String jsonDataWeighted = """
             {
               "name": "WeightedGraphExample",
@@ -55,21 +56,21 @@ public class Main {
             }
             """;
 
-       //Graph graph = GraphInputHelper.createGraphFromUserInput();
+        //Graph graph = GraphInputHelper.createGraphFromUserInput();
        
         //Graph g = GraphCreator.createGraphFromGraphData(data);
         //System.out.println(graph);
         try {
             // Test the weighted graph parsing
             GraphData graphDataWeighted = GraphDataParser.parseGraphData(jsonDataWeighted);
-
-            // Test the unweighted graph parsing
-            GraphData graphDataUnweighted = GraphDataParser.parseGraphData(jsonDataUnweighted);
+            //System.out.println(graphDataWeighted);
            
-            Graph g = GraphCreator.createGraphFromGraphData(graphDataUnweighted);
-            int [][]m = GraphConverter.toAdjMatrix(g.getFS(), g.getAPS());
-            int [][]r=GraphConverter.adjMatrixToFsAps(m);
-            GraphPrinter.fsApsPrinter(r[0], r[1]);
+            Graph g = GraphCreator.createGraphFromGraphData(graphDataWeighted);
+            //System.out.println(g);
+            
+            int[][]djikestra = Dijkstra.dijkstra(g, 1);
+            GraphPrinter.printDijkstraResult(djikestra);
+            
         } catch (Exception e) {
             System.out.println("Error parsing graph data: " + e.getMessage());
             e.printStackTrace();
