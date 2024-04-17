@@ -4,6 +4,11 @@
  */
 package utils;
 
+import com.mycompany.graphs.Algorithms.Tarjan;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  *
  * @author Administrator
@@ -83,5 +88,54 @@ public class GraphPrinter {
             System.out.println(String.format("%-10d %-10s %-10s", i, distanceStr, predStr));
         }
     }
+    
+    public static void printTarjanResults(Tarjan tarjan) {
+        // Retrieve the components and cfc array from the Tarjan object
+        List<List<Integer>> components = tarjan.getComponents();
+        int[] cfc = tarjan.getCFC();
+        int[] fsr = tarjan.getFsr();
+        int[] apsr = tarjan.getApsr();
+        int[] pilch = tarjan.getPilch();
+        List<Integer> br = tarjan.getBr();
+
+        // Check for null or empty components
+        if (components == null || components.isEmpty()) {
+            System.out.println("No strongly connected components found.");
+            return;
+        }
+
+        // Printing components as mapped to cfc
+        System.out.println("Strongly connected components:");
+        for (int i = 0; i < components.size(); i++) {
+            List<Integer> component = components.get(i);
+            System.out.print("Composante " + (i + 1) + " : {");
+            for (int j = 0; j < component.size(); j++) {
+                System.out.print(component.get(j) + (j < component.size() - 1 ? ", " : ""));
+            }
+            System.out.println("}");
+        }
+
+        // Printing the cfc array
+        System.out.println("Component ID array (cfc): " + Arrays.toString(cfc));
+
+        // Printing fsr and apsr arrays
+        if (fsr != null && apsr != null) {
+            System.out.println("Reduced graph FS (fsr): " + Arrays.toString(fsr));
+            System.out.println("Reduced graph APS (apsr): " + Arrays.toString(apsr));
+        } else {
+            System.out.println("Reduced graph data not available.");
+        }
+
+        // Optionally print the pilch (stack) if needed
+        System.out.println("Stack (pilch): " + Arrays.toString(pilch));
+        
+        // Printing Reduced Graph Bases
+         System.out.println("Base components of the reduced graph: " + br);
+         
+         //Printing bases from the original graph
+         tarjan.editionBases();
+    }
+
+    
 }
 
