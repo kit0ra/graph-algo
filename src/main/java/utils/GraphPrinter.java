@@ -5,7 +5,6 @@
 package utils;
 
 import com.mycompany.graphs.Algorithms.Tarjan;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -134,6 +133,39 @@ public class GraphPrinter {
          
          //Printing bases from the original graph
          tarjan.editionBases();
+    }
+    
+    //Prufer 
+    public static void displayPruferCode(int[] pruferCode) {
+        if (pruferCode == null || pruferCode.length == 0) {
+            System.out.println("Prufer code is empty or not initialized.");
+            return;
+        }
+
+        
+        System.out.print("Prufer Code: [");
+        for (int i = 1; i < pruferCode.length; i++) {
+            System.out.print(pruferCode[i]);
+            if (i < pruferCode.length - 1) {
+                System.out.print(", ");
+            }
+        }
+        System.out.println("]");
+    }
+
+    public static void displayTreeConnections(int[][] adjacencyMatrix) {
+       
+        int n = adjacencyMatrix[0][0];
+
+        System.out.println("Tree Connections:");
+        // Iterate through the matrix to find and print connections
+        for (int i = 1; i <= n; i++) {
+            for (int j = i + 1; j <= n; j++) { // Start from i+1 to avoid printing symmetrical connections twice
+                if (adjacencyMatrix[i][j] == 1) {
+                    System.out.println(i + " <--> " + j); // Print the connection
+                }
+            }
+        }
     }
 
     

@@ -8,6 +8,7 @@ import GraphInput.GraphInputHelper;
 import com.mycompany.graphs.Algorithms.Dijkstra;
 import com.mycompany.graphs.Algorithms.GraphRank;
 import com.mycompany.graphs.Algorithms.GraphTraversal;
+import com.mycompany.graphs.Algorithms.Prufer;
 import com.mycompany.graphs.Algorithms.Tarjan;
 import graphio.GraphData;
 import graphio.GraphDataParser;
@@ -108,7 +109,7 @@ public class Main {
         };
 
         
-        Graph graph = new Graph(fs,aps);
+        /*Graph graph = new Graph(fs,aps);
         //System.out.println(graph);
         Tarjan tarjan = new Tarjan(graph);
         List<List<Integer>> a = tarjan.findStronglyConnectedComponents();
@@ -117,7 +118,26 @@ public class Main {
         tarjan.findStronglyConnectedComponents();
         //tarjan.populateCFC();  // Populate cfc correctly
         tarjan.createReducedGraph();  // Create the reduced graph
-        GraphPrinter.printTarjanResults(tarjan);
+        GraphPrinter.printTarjanResults(tarjan);*/
         
+        int [][] adj = new int [8+1][8+1];
+        adj[0][0] = 8;
+        adj[1][0] = 8+7;
+        adj[1][2]=1; adj[1][3]=1; adj[1][8]=1; //1
+        adj[2][1]=1;  adj[2][4]=1;  adj[2][5]=1; //2
+        adj[3][1]=1; //3
+        adj[4][2]=1;//4
+        adj[5][2]=1; adj[5][6]=1; adj[5][7]=1; //5
+        adj[6][5]=1; //6
+        adj[7][5]=1; //7
+        adj[8][1]=1; //8
+        
+        /*int [] prufer = Prufer.generatePruferCode(adj);
+        GraphPrinter.displayPruferCode(prufer);
+        int [][] decode = Prufer.decodePruferCode(prufer);
+        GraphPrinter.adjMatrixPrinter(decode);
+        System.out.println(decode[0][0]);
+        System.out.println(decode[1][0]);
+        GraphPrinter.displayTreeConnections(decode);*/
     }
 }
