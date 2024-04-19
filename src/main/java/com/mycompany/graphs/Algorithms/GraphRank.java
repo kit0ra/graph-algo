@@ -16,7 +16,7 @@ public class GraphRank {
         pilch[0] = s;
     }
 
-    public static int[] calculateRang(int[] fs, int[] aps) {
+    public static int[] calculateRank(int[] fs, int[] aps) {
         int n = aps[0], s, k, h, t;
         int[] rang = new int[n + 1];
         int[] pilch = new int[n + 1];
