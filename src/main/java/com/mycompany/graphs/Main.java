@@ -3,13 +3,15 @@
  */
 package com.mycompany.graphs;
 
-
+import com.mycompany.graphs.Algorithms.Kruskal;
 import com.mycompany.graphs.Algorithms.ScheduleManager;
+import hepers.KruskalEdge;
+import hepers.KruskalGraph;
 import hepers.Task;
 import hepers.TaskManager;
+
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  *
@@ -259,16 +261,71 @@ public class Main {
         manager.addTask(ft);
 
 // Display tasks to verify proper setup
-        manager.displayTasks();
-
+        //manager.displayTasks();
 // Assuming ScheduleManager and Task classes exist and are designed to interact properly
         ScheduleManager schedule = new ScheduleManager(manager);
         /*schedule.calculateEarliestStartForTasks();
         schedule.calculateLatestStartForTasks();
         manager.displayTasks();
         schedule.calculateCriticalTasks();
-        schedule.findAllCriticalPaths();   */     
-       //manager.populateSuccessors();
+        schedule.findAllCriticalPaths();   */
+        //manager.populateSuccessors();
+        /*int n = 4; // Number of vertices
+        int[][] weightMatrix = new int[n + 1][n + 1];
 
+        // Example adjacency matrix with weights
+        // Node indices start from 1 to n
+        for (int x = 1; x <= n; x++) {
+            for (int y = 1; y <= n; y++) {
+                weightMatrix[x][y] = (x == y) ? 0 : Integer.MAX_VALUE / 2;  // Use large value to represent no direct path
+            }
+        }
+
+        // Add weighted edges
+        weightMatrix[1][2] = 2;
+        weightMatrix[1][4] = 6;
+
+        weightMatrix[2][3] = -2;
+
+        weightMatrix[3][2] = 5;
+        weightMatrix[3][4] = 5;
+
+        weightMatrix[4][1] = -4;
+        weightMatrix[4][2] = -1;
+
+        Danzig danzig = new Danzig();
+        danzig.calculateShortestPath(weightMatrix);
+        danzig.printMatrix(); // Th*/
+
+
+        int numberOfVertices = 7;
+        KruskalGraph graph = new KruskalGraph(numberOfVertices, 11);
+
+        int[][] edgeData = {
+            {1, 2, 1}, // Edge from 1 to 2 with weight 1
+            {1, 5, 3}, // Edge from 1 to 5 with weight 3
+            {1, 4, 1}, // Edge from 1 to 4 with weight 1
+            {2, 3, 1}, // Edge from 2 to 3 with weight 1
+            {4, 3, 2}, // Edge from 4 to 3 with weight 2
+            {4, 5, 2}, // Edge from 4 to 5 with weight 2
+            {4, 6, 2}, // Edge from 4 to 6 with weight 2
+            {5, 6, 1}, // Edge from 5 to 6 with weight 1
+            {6, 3, 2}, // Edge from 6 to 3 with weight 2
+            {6, 7, 1}, // Edge from 6 to 7 with weight 1
+            {7, 3, 3} // Edge from 7 to 3 with weight 3
+        };
+
+        for (int[] ed : edgeData) {
+            KruskalEdge edge = new KruskalEdge(ed[0], ed[1], ed[2]);
+            graph.addEdge(edge);
+        }
+
+        graph.printEdges();  // Output all edges to verify they were added correctly
+        graph.sortEdges();
+        graph.printEdges();
+        
+        Kruskal kruskal = new Kruskal(graph);
+        kruskal.calculateMST();
+        System.out.println(kruskal);
     }
 }
