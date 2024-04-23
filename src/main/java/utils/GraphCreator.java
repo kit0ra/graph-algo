@@ -24,10 +24,10 @@ public class GraphCreator {
 
         int[] fs = new int[vertices + edgeCount + 1]; // Enough space for all vertices and edges
         int[] aps = new int[vertices + 1]; // One entry per vertex, plus the first entry
-        int[][] weights = null;
+        double[][] weights = null;
 
         if (graphData.isWeighted()) {
-            weights = new int[vertices + 1][vertices + 1]; // Create weight matrix
+            weights = new double[vertices + 1][vertices + 1]; // Create weight matrix
         }
 
         fs[0] = vertices + edgeCount; // First entry of fs is the total number of vertices and edges

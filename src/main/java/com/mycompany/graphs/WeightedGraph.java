@@ -12,30 +12,30 @@ import utils.GraphPrinter;
  */
 public class WeightedGraph extends Graph {
 
-    private int[][] weights; // Edge weights
-    
+    private double[][] weights; // Edge weights with double precision
+
     @Override
     public boolean isWeighted() {
         return true;
     }
-    
-    public WeightedGraph(int[] fs, int[] aps, int[][] weights) {
+
+    public WeightedGraph(int[] fs, int[] aps, double[][] weights) {
         super(fs, aps);
         this.weights = weights.clone();
     }
 
-    public int[][] getWeights() {
+    public double[][] getWeights() {
         return weights.clone();
     }
 
-    public void setWeights(int[][] newWeights) {
+    public void setWeights(double[][] newWeights) {
         this.weights = newWeights.clone();
     }
-    
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(GraphPrinter.formatFsAps(fs, aps)); 
+        sb.append(GraphPrinter.formatFsAps(fs, aps));
 
         // Append weights matrix if this graph is weighted
         if (weights != null) {
@@ -46,10 +46,10 @@ public class WeightedGraph extends Graph {
         return sb.toString();
     }
 
-    private void appendMatrixToString(StringBuilder sb, int[][] matrix) {
+    private void appendMatrixToString(StringBuilder sb, double[][] matrix) {
         for (int i = 1; i < matrix.length; i++) { // Assuming the matrix uses 1-based indexing
             for (int j = 1; j < matrix[i].length; j++) {
-                sb.append(String.format("%4d", matrix[i][j])).append(" ");  // Adjust format as necessary
+                sb.append(String.format("%4.2f", matrix[i][j])).append(" ");  // Format for double precision
             }
             sb.append("\n"); // New line at the end of each row
         }
