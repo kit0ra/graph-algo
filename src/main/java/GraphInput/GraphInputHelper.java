@@ -5,7 +5,7 @@
 package GraphInput;
 
 import com.mycompany.graphs.Graph;
-import graphio.GraphData;
+import io.GraphData;
 import com.mycompany.graphs.WeightedGraph;
 import java.util.HashMap;
 import java.util.Map;

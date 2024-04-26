@@ -68,14 +68,14 @@ public class GraphPrinter {
         }
     }
 
-    public static void printDijkstraResult(int[][] result) {
+    public static void printDijkstraResult(double[][] result) {
         if (result == null || result.length < 2 || result[0].length == 0) {
             System.out.println("No results to display.");
             return;
         }
 
-        int[] distance = result[0];
-        int[] pred = result[1];
+        double[] distance = result[0];
+        double[] pred = result[1];
 
         System.out.println("Dijkstra's algorithm results:");
         System.out.println(String.format("%-10s %-10s %-10s", "Vertex", "Distance", "Predecessor"));
@@ -83,8 +83,8 @@ public class GraphPrinter {
         // Start from index 1 if your vertices are 1-based indexed
         // Adjust starting index based on your specific indexing in your graph structure
         for (int i = 1; i < distance.length; i++) {
-            String distanceStr = distance[i] == Integer.MAX_VALUE ? "Infinity" : Integer.toString(distance[i]);
-            String predStr = pred[i] == -1 ? "None" : Integer.toString(pred[i]);
+            String distanceStr = distance[i] == Integer.MAX_VALUE ? "Infinity" : Double.toString(distance[i]);
+            String predStr = pred[i] == -1 ? "None" : Integer.toString((int) pred[i]);
             System.out.println(String.format("%-10d %-10s %-10s", i, distanceStr, predStr));
         }
     }

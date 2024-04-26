@@ -9,9 +9,14 @@ import hepers.KruskalEdge;
 import hepers.KruskalGraph;
 import hepers.Task;
 import hepers.TaskManager;
+import io.GraphData;
+import io.GraphDataParser;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.SwingUtilities;
+import ui.MainFrame;
+import utils.GraphCreator;
 
 /**
  *
@@ -19,7 +24,7 @@ import java.util.List;
  */
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         //DatabaseHandler dbHandler = new DatabaseHandler("C://Users//Administrator//Documents//graph_db.accdb");
         //GraphData data = dbHandler.getGraphById(1);
 
@@ -327,5 +332,15 @@ public class Main {
         Kruskal kruskal = new Kruskal(graph);
         kruskal.calculateMST();
         System.out.println(kruskal);
+        
+        
+        SwingUtilities.invokeLater(() -> {
+            MainFrame frame = new MainFrame();
+            frame.setVisible(true);
+        });
+        
+        /*GraphData data1 = GraphDataParser.parseGraphData(jsonDataWeighted);
+        Graph g1 = GraphCreator.createGraphFromGraphData(data1);
+        System.out.println(g1);*/
     }
 }

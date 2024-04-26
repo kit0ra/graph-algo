@@ -4,18 +4,57 @@
  */
 package ui;
 
+import com.mycompany.graphs.Graph;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
+import javax.swing.ListModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import operations.FileImporter;
+import operations.GraphManager;
+
 /**
  *
  * @author Administrator
  */
-public class MainF extends javax.swing.JFrame {
+public class MainFrame extends javax.swing.JFrame {
+
+    private GraphManager graphManager;
 
     /**
      * Creates new form Main
      */
-    public MainF() {
+    public MainFrame() {
+        this.graphManager = new GraphManager(graphCount);
         initComponents();
+        graphList.setModel(graphManager.getListModel());
+         updateGraphListUI();
+        setupListSelectionListener();  
     }
+
+// Field to hold the list model
+    private void setupListSelectionListener() {
+        graphList.addListSelectionListener(this::graphListValueChanged);
+    }
+
+    private void updateGraphDetailsUI(Graph graph) {
+        numberOfVerticesLabel.setText("" + graph.getVertices()); // Update with actual methods
+        numberOfEdgesLabel.setText("" + graph.getEdges());
+        graphTypeLabel.setText("" + (graph.getType()? "orienter" : "non-orienter"));
+        System.out.println("" + graph.getName());
+    }
+    
+    private void updateGraphListUI() {
+        DefaultListModel<String> model = new DefaultListModel<>();
+        for (Graph graph : graphManager.getGraphs()) {
+            model.addElement(graph.getName());
+        }
+        graphList.setModel(model);
+        graphCount.setText(""+model.getSize());
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -29,14 +68,16 @@ public class MainF extends javax.swing.JFrame {
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        graphCount = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        graphList = new javax.swing.JList<>();
         jPanel6 = new javax.swing.JPanel();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
-        jButton10 = new javax.swing.JButton();
+        importButton = new javax.swing.JButton();
         jButton11 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -49,9 +90,9 @@ public class MainF extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        numberOfVerticesLabel = new javax.swing.JLabel();
+        numberOfEdgesLabel = new javax.swing.JLabel();
+        graphTypeLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
@@ -66,20 +107,32 @@ public class MainF extends javax.swing.JFrame {
 
         jLabel4.setText("Nombre de Graphs :");
 
-        jLabel8.setText("NaN");
+        graphCount.setText("NaN");
 
         jPanel5.setBackground(new java.awt.Color(221, 221, 221));
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("GraphList"));
+
+        graphList.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "item1", "item2", "item3", "item4", " " };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        graphList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                graphListValueChanged(evt);
+            }
+        });
+        jScrollPane1.setViewportView(graphList);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 202, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 174, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
         );
 
         jPanel6.setBackground(new java.awt.Color(221, 221, 221));
@@ -93,7 +146,12 @@ public class MainF extends javax.swing.JFrame {
 
         jButton9.setText("create (I)");
 
-        jButton10.setText("import");
+        importButton.setText("import");
+        importButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                importButtonActionPerformed(evt);
+            }
+        });
 
         jButton11.setText("export");
 
@@ -113,7 +171,7 @@ public class MainF extends javax.swing.JFrame {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jButton9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton10)
+                        .addComponent(importButton)
                         .addGap(18, 18, 18)
                         .addComponent(jButton11)))
                 .addContainerGap(38, Short.MAX_VALUE))
@@ -129,7 +187,7 @@ public class MainF extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton9)
-                    .addComponent(jButton10)
+                    .addComponent(importButton)
                     .addComponent(jButton11))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
@@ -145,7 +203,7 @@ public class MainF extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(graphCount, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -155,7 +213,7 @@ public class MainF extends javax.swing.JFrame {
                 .addGap(15, 15, 15)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel8))
+                    .addComponent(graphCount))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -229,11 +287,11 @@ public class MainF extends javax.swing.JFrame {
 
         jLabel3.setText("Type de Graph :");
 
-        jLabel5.setText("NaN");
+        numberOfVerticesLabel.setText("NaN");
 
-        jLabel6.setText("NaN");
+        numberOfEdgesLabel.setText("NaN");
 
-        jLabel7.setText("NaN");
+        graphTypeLabel.setText("NaN");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -245,15 +303,15 @@ public class MainF extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(numberOfVerticesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(numberOfEdgesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(graphTypeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(107, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -262,15 +320,15 @@ public class MainF extends javax.swing.JFrame {
                 .addGap(15, 15, 15)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel5))
+                    .addComponent(numberOfVerticesLabel))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel6))
+                    .addComponent(numberOfEdgesLabel))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel7))
+                    .addComponent(graphTypeLabel))
                 .addContainerGap(46, Short.MAX_VALUE))
         );
 
@@ -299,6 +357,36 @@ public class MainF extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void importButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importButtonActionPerformed
+        try {
+            String jsonContent = FileImporter.selectJsonFile();
+            if (jsonContent != null) {
+                Graph newGraph = FileImporter.importJsonFile(jsonContent);
+                if (newGraph != null) {
+                    graphManager.addGraph(newGraph);  // Assuming you have a GraphManager instance
+                    updateGraphListUI();
+                    System.out.println("Graph added: " + newGraph.getName());
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Failed to import graph: " + ex.getMessage(), "Import Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_importButtonActionPerformed
+
+    //handle selected item on graphList
+    private void graphListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_graphListValueChanged
+        // TODO add your handling code here:
+        if (!evt.getValueIsAdjusting()) {
+            String selectedGraphName = graphList.getSelectedValue();
+            Graph selectedGraph = graphManager.getGraph(selectedGraphName); // Assuming you have a method to fetch Graph
+
+            if (selectedGraph != null) {
+                updateGraphDetailsUI(selectedGraph);
+            }
+        }
+    }//GEN-LAST:event_graphListValueChanged
+
     /**
      * @param args the command line arguments
      */
@@ -316,29 +404,34 @@ public class MainF extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainF.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainF.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainF.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainF.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainF().setVisible(true);
+                new MainFrame().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JLabel graphCount;
+    private javax.swing.JList<String> graphList;
+    private javax.swing.JLabel graphTypeLabel;
+    private javax.swing.JButton importButton;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -352,10 +445,6 @@ public class MainF extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
@@ -367,5 +456,8 @@ public class MainF extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel numberOfEdgesLabel;
+    private javax.swing.JLabel numberOfVerticesLabel;
     // End of variables declaration//GEN-END:variables
 }

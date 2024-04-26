@@ -12,12 +12,34 @@ import utils.GraphPrinter;
 
 
 public class Graph {
+    protected String name;
+
+    public void setName(String newName) {
+        this.name = newName;
+    }
+
+    public String getName() {
+        return name;
+    }
+    
+    protected boolean type;
+
+    public void setType(boolean isDirected) {
+        this.type = isDirected;
+    }
+
+    public boolean getType() {
+        return type;
+    }
+    
     protected int[] fs;
     protected int[] aps;
 
     public Graph(int[] fs, int[] aps) {
         this.fs = fs.clone();
         this.aps = aps.clone();
+        this.name = "Untitled";
+        this.type = true;
     }
     
     public boolean isWeighted() {

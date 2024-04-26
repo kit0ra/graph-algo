@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package graphio;
+package io;
 
 /**
  *
@@ -12,14 +12,16 @@ import java.util.Map;
 
 public class GraphData {
     private String name;
-    private final boolean isOriented;
-    private final boolean isWeighted;
+    private boolean isOriented;
+    private boolean isWeighted;
     private int vertices;
     private int edgeCount;
-    private Map<Integer, Map<Integer, Integer>> edges;
-    private int[][] weights; // Optional, only for weighted graphs
+    private Map<String, Map<String, Double>> edges;
 
-    public GraphData(String name, boolean isOriented, boolean isWeighted, int vertices, int edgeCount, Map<Integer, Map<Integer, Integer>> edges) {
+    
+    private double[][] weights; // Optional, only for weighted graphs
+
+    public GraphData(String name, boolean isOriented, boolean isWeighted, int vertices, int edgeCount, Map<String, Map<String, Double>> edges) {
         this.name = name;
         this.isOriented = isOriented;
         this.isWeighted = isWeighted;
@@ -44,10 +46,10 @@ public class GraphData {
     public boolean isWeighted() {
         return isWeighted;
     }
-    
-    public void setWeights(int[][] weights) {
+
+    public void setWeights(double[][] weights) {
         if (isWeighted) {  // Check to ensure that weights should be set for weighted graphs only
-            this.weights = new int[weights.length][];
+            this.weights = new double[weights.length][];
             for (int i = 0; i < weights.length; i++) {
                 this.weights[i] = weights[i].clone(); // Deep copying for safety
             }
@@ -72,12 +74,16 @@ public class GraphData {
         this.edgeCount = n;
     }
 
-    public Map<Integer, Map<Integer, Integer>> getEdges() {
+    public Map<String, Map<String, Double>> getEdges() {
         return edges;
     }
 
-    public void setEdges(Map<Integer, Map<Integer, Integer>> edges) {
+    public void setEdges(Map<String, Map<String, Double>> edges) {
         this.edges = edges;
+    }
+
+    public double[][] getWeights() {
+        return weights;
     }
     
     @Override
