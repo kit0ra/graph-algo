@@ -1,10 +1,10 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
-package com.mycompany.graphs;
+package graphs;
 
-import com.mycompany.graphs.Algorithms.Kruskal;
-import com.mycompany.graphs.Algorithms.ScheduleManager;
+import algorithms.Kruskal;
+import algorithms.ScheduleManager;
 import hepers.KruskalEdge;
 import hepers.KruskalGraph;
 import hepers.Task;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.SwingUtilities;
 import ui.MainFrame;
-import utils.GraphCreator;
+import utilities.GraphCreator;
 
 /**
  *

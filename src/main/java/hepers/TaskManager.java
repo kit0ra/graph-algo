@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import utils.GraphPrinter;
+import utilities.GraphPrinter;
 
 public class TaskManager {
 

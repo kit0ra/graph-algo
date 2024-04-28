@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package utils;
+package utilities;
 
 /**
  *
@@ -10,9 +10,9 @@ package utils;
  */
 import java.util.Map;
 
-import com.mycompany.graphs.Graph;
+import graphs.Graph;
 import io.GraphData;
-import com.mycompany.graphs.WeightedGraph;
+import graphs.WeightedGraph;
 
 public class GraphCreator {
 

@@ -4,13 +4,13 @@
  */
 package GraphInput;
 
-import com.mycompany.graphs.Graph;
+import graphs.Graph;
 import io.GraphData;
-import com.mycompany.graphs.WeightedGraph;
+import graphs.WeightedGraph;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import utils.GraphCreator;
+import utilities.GraphCreator;
 
 /**
  *

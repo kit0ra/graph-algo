@@ -4,16 +4,15 @@
  */
 package ui;
 
-import com.mycompany.graphs.Graph;
+import graphs.Graph;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
-import javax.swing.ListModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import operations.FileImporter;
 import operations.GraphManager;
+import operations.GraphOperations;
+import utilities.GraphConverter;
 
 /**
  *
@@ -21,6 +20,7 @@ import operations.GraphManager;
  */
 public class MainFrame extends javax.swing.JFrame {
 
+    private GraphOperations graphOps;
     private GraphManager graphManager;
 
     /**
@@ -28,10 +28,11 @@ public class MainFrame extends javax.swing.JFrame {
      */
     public MainFrame() {
         this.graphManager = new GraphManager(graphCount);
+        this.graphOps = new GraphOperations();
         initComponents();
         graphList.setModel(graphManager.getListModel());
-         updateGraphListUI();
-        setupListSelectionListener();  
+        updateGraphListUI();
+        setupListSelectionListener();
     }
 
 // Field to hold the list model
@@ -42,19 +43,19 @@ public class MainFrame extends javax.swing.JFrame {
     private void updateGraphDetailsUI(Graph graph) {
         numberOfVerticesLabel.setText("" + graph.getVertices()); // Update with actual methods
         numberOfEdgesLabel.setText("" + graph.getEdges());
-        graphTypeLabel.setText("" + (graph.getType()? "orienter" : "non-orienter"));
+        graphTypeLabel.setText("" + (graph.getType() ? "orienter" : "non-orienter"));
+        weightLabel.setText("" + (graph.isWeighted()? "oui" : "non"));
         System.out.println("" + graph.getName());
     }
-    
+
     private void updateGraphListUI() {
         DefaultListModel<String> model = new DefaultListModel<>();
         for (Graph graph : graphManager.getGraphs()) {
             model.addElement(graph.getName());
         }
         graphList.setModel(model);
-        graphCount.setText(""+model.getSize());
+        graphCount.setText("" + model.getSize());
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -81,11 +82,13 @@ public class MainFrame extends javax.swing.JFrame {
         jButton11 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        fsApsButton = new javax.swing.JButton();
+        fpAppButton = new javax.swing.JButton();
+        adjMatrixButton = new javax.swing.JButton();
+        ddiButton = new javax.swing.JButton();
+        ddeButton = new javax.swing.JButton();
+        weightMatButton = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -93,9 +96,18 @@ public class MainFrame extends javax.swing.JFrame {
         numberOfVerticesLabel = new javax.swing.JLabel();
         numberOfEdgesLabel = new javax.swing.JLabel();
         graphTypeLabel = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        weightLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu2 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        distanceAlg = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
 
@@ -226,54 +238,90 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Graph Structures"));
 
-        jButton1.setText("FS_APS");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        fsApsButton.setText("FS_APS");
+        fsApsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                showFsApsAction(evt);
             }
         });
 
-        jButton2.setText("FP_APP");
+        fpAppButton.setText("FP_APP");
+        fpAppButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showFpApp(evt);
+            }
+        });
 
-        jButton3.setText("MAT_ADJ");
+        adjMatrixButton.setText("MAT_ADJ");
+        adjMatrixButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showAdjMatrix(evt);
+            }
+        });
 
-        jButton4.setText("DDI");
+        ddiButton.setText("DDI");
+        ddiButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showDDI(evt);
+            }
+        });
 
-        jButton5.setText("DDE");
+        ddeButton.setText("DDE");
+        ddeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showDDE(evt);
+            }
+        });
+
+        weightMatButton.setText("MAT_POIDS");
+        weightMatButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showWeightMat(evt);
+            }
+        });
+
+        jButton2.setText("AFFICHER");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(44, 44, 44)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                .addComponent(jButton3)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(weightMatButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fsApsButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(31, 31, 31)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(ddiButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fpAppButton, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(adjMatrixButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(ddeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(70, 70, 70)
-                .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton5)
-                .addGap(56, 56, 56))
+                .addGap(108, 108, 108)
+                .addComponent(jButton2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1)
+                    .addComponent(fsApsButton)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton2)
-                        .addComponent(jButton3)))
+                        .addComponent(fpAppButton)
+                        .addComponent(adjMatrixButton)))
                 .addGap(24, 24, 24)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton4)
-                    .addComponent(jButton5))
-                .addContainerGap(86, Short.MAX_VALUE))
+                    .addComponent(ddiButton)
+                    .addComponent(ddeButton)
+                    .addComponent(weightMatButton))
+                .addGap(28, 28, 28)
+                .addComponent(jButton2)
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         jPanel2.add(jPanel3, java.awt.BorderLayout.CENTER);
@@ -293,6 +341,10 @@ public class MainFrame extends javax.swing.JFrame {
 
         graphTypeLabel.setText("NaN");
 
+        jLabel5.setText("Weighted : ");
+
+        weightLabel.setText("NaN");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -309,9 +361,13 @@ public class MainFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(numberOfEdgesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(graphTypeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(graphTypeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(weightLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(107, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -329,17 +385,43 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(graphTypeLabel))
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(weightLabel))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         jPanel2.add(jPanel4, java.awt.BorderLayout.PAGE_START);
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
 
-        jMenu2.setText("Traversal");
-        jMenuBar1.add(jMenu2);
-
         jMenu3.setText("Algorithms");
+
+        jMenuItem1.setText("Distance");
+        jMenu3.add(jMenuItem1);
+
+        distanceAlg.setText("Rank");
+        jMenu3.add(distanceAlg);
+
+        jMenuItem5.setText("Tarjan");
+        jMenu3.add(jMenuItem5);
+
+        jMenuItem2.setText("Dijkstra");
+        jMenu3.add(jMenuItem2);
+
+        jMenuItem3.setText("Danzig");
+        jMenu3.add(jMenuItem3);
+
+        jMenuItem4.setText("Prufer");
+        jMenu3.add(jMenuItem4);
+
+        jMenuItem6.setText("Schedule Manager");
+        jMenu3.add(jMenuItem6);
+
+        jMenuItem7.setText("Kruskal");
+        jMenu3.add(jMenuItem7);
+
         jMenuBar1.add(jMenu3);
 
         jMenu5.setText("Example");
@@ -353,9 +435,9 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void showFsApsAction(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showFsApsAction
+        graphOps.performFsApsOperation();
+    }//GEN-LAST:event_showFsApsAction
 
     private void importButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importButtonActionPerformed
         try {
@@ -374,18 +456,37 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_importButtonActionPerformed
 
-    //handle selected item on graphList
     private void graphListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_graphListValueChanged
-        // TODO add your handling code here:
         if (!evt.getValueIsAdjusting()) {
             String selectedGraphName = graphList.getSelectedValue();
             Graph selectedGraph = graphManager.getGraph(selectedGraphName); // Assuming you have a method to fetch Graph
 
             if (selectedGraph != null) {
                 updateGraphDetailsUI(selectedGraph);
+                graphOps.setCurrentGraph(selectedGraph);
             }
         }
     }//GEN-LAST:event_graphListValueChanged
+
+    private void showFpApp(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showFpApp
+        graphOps.performFpAppOperation();
+    }//GEN-LAST:event_showFpApp
+
+    private void showAdjMatrix(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showAdjMatrix
+        graphOps.performAdjMatrixOperation();
+    }//GEN-LAST:event_showAdjMatrix
+
+    private void showDDI(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showDDI
+        graphOps.performDDIOperation();
+    }//GEN-LAST:event_showDDI
+
+    private void showDDE(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showDDE
+        graphOps.performDDEOperation();
+    }//GEN-LAST:event_showDDE
+
+    private void showWeightMat(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showWeightMat
+        graphOps.performWeightMatrixOperation();
+    }//GEN-LAST:event_showWeightMat
 
     /**
      * @param args the command line arguments
@@ -426,17 +527,19 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton adjMatrixButton;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton ddeButton;
+    private javax.swing.JButton ddiButton;
+    private javax.swing.JMenuItem distanceAlg;
+    private javax.swing.JButton fpAppButton;
+    private javax.swing.JButton fsApsButton;
     private javax.swing.JLabel graphCount;
     private javax.swing.JList<String> graphList;
     private javax.swing.JLabel graphTypeLabel;
     private javax.swing.JButton importButton;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
@@ -445,11 +548,18 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JMenu jMenu2;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -459,5 +569,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel numberOfEdgesLabel;
     private javax.swing.JLabel numberOfVerticesLabel;
+    private javax.swing.JLabel weightLabel;
+    private javax.swing.JButton weightMatButton;
     // End of variables declaration//GEN-END:variables
 }

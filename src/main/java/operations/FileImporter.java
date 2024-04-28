@@ -4,9 +4,9 @@
  */
 package operations;
 
-import com.mycompany.graphs.Algorithms.Dijkstra;
-import com.mycompany.graphs.Graph;
-import com.mycompany.graphs.WeightedGraph;
+import algorithms.Dijkstra;
+import graphs.Graph;
+import graphs.WeightedGraph;
 import io.GraphData;
 import io.GraphDataParser;
 import java.io.File;
@@ -16,8 +16,7 @@ import java.nio.file.Paths;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import utils.GraphCreator;
-import utils.GraphPrinter;
+import utilities.GraphCreator;
 
 /**
  *

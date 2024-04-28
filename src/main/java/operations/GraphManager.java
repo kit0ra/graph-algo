@@ -8,7 +8,7 @@ package operations;
  *
  * @author Administrator
  */
-import com.mycompany.graphs.Graph;
+import graphs.Graph;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
