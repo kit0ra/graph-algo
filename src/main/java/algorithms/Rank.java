@@ -10,7 +10,7 @@ import utilities.GraphHelpers;
  *
  * @author Administrator
  */
-public class GraphRank {
+public class Rank {
      private static void empiler(int s, int[] pilch) {
         pilch[s] = pilch[0];
         pilch[0] = s;

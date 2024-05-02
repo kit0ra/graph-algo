@@ -15,18 +15,18 @@ public class GraphConverter {
         int total = fs[0];
 
         // Initialize the adjacency matrix
-        int[][] matrix = new int[vertices][vertices + 1];
+        int[][] matrix = new int[vertices+ 1 ][vertices + 1];
 
         // First cell of matrix contains the number of vertices
         matrix[0][0] = vertices;
         matrix[1][0] = total;
 
         // Populate the adjacency matrix
-        for (int i = 1; i <= vertices; i++) {
-            int start = aps[i]; // Start index in fs for the i-th vertex's successors
-            for (int j = start; fs[j] != 0; j++) { // Iterate through successors until a block separator (0) is found
-                int successor = fs[j];
-                matrix[i - 1][successor] = 1; // Mark the edge presence with 1
+        for (int vertex = 1; vertex <= vertices; vertex++) {
+            int start = aps[vertex]; // Start index in FS for the vertex's successors
+            for (int index = start; fs[index] != 0; index++) { // Iterate until block separator found
+                int successor = fs[index];
+                matrix[vertex][successor] = 1; // Mark the edge presence with 1
             }
         }
 

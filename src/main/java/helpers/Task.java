@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package hepers;
+package helpers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,7 +110,19 @@ public class Task {
     public void addPredecessor(Task predecessor) {
         this.predecessors.add(predecessor);
     }
-
+    
+    public String getDependenciesString() {
+        if (predecessors.isEmpty()) {
+            return "None";
+        }
+        StringBuilder builder = new StringBuilder();
+        for (Task t : predecessors) {
+            builder.append(t.getName()).append(", ");
+        }
+        builder.setLength(builder.length() - 2); // Remove the last ", "
+        return builder.toString();
+    }
+    
     @Override
     public String toString() {
         return "Task{" + "name=" + name + ", duration=" + duration + ", predecessors=" + predecessors + ", earliestStart=" + earliestStart + ", latestStart=" + latestStart + ", index=" + index + '}';

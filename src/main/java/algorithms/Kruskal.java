@@ -4,8 +4,8 @@
  */
 package algorithms;
 
-import hepers.KruskalEdge;
-import hepers.KruskalGraph;
+import helpers.KruskalEdge;
+import helpers.KruskalGraph;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

@@ -5,14 +5,15 @@
 package ui;
 
 import graphs.Graph;
+import helpers.TaskManager;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import operations.FileImporter;
+import operations.GraphAlgorithms;
 import operations.GraphManager;
 import operations.GraphOperations;
-import utilities.GraphConverter;
 
 /**
  *
@@ -22,6 +23,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private GraphOperations graphOps;
     private GraphManager graphManager;
+    private GraphAlgorithms GraphAlg;
 
     /**
      * Creates new form Main
@@ -29,13 +31,20 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame() {
         this.graphManager = new GraphManager(graphCount);
         this.graphOps = new GraphOperations();
+        this.GraphAlg = new GraphAlgorithms();
         initComponents();
         graphList.setModel(graphManager.getListModel());
         updateGraphListUI();
         setupListSelectionListener();
+        setupTaskManager();
     }
 
-// Field to hold the list model
+    private void setupTaskManager() {
+        TaskManager manager = new TaskManager();
+        GraphAlgorithms.setTaskManager(manager);
+    }
+
+    // Field to hold the list model
     private void setupListSelectionListener() {
         graphList.addListSelectionListener(this::graphListValueChanged);
     }
@@ -100,13 +109,13 @@ public class MainFrame extends javax.swing.JFrame {
         weightLabel = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
         distanceAlg = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem6 = new javax.swing.JMenuItem();
+        rankAlg = new javax.swing.JMenuItem();
+        tarjanAlg = new javax.swing.JMenuItem();
+        dijkstraAlg = new javax.swing.JMenuItem();
+        danzigAlg = new javax.swing.JMenuItem();
+        pruferAlg = new javax.swing.JMenuItem();
+        scheduleManagerAlg = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
@@ -176,15 +185,15 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jButton6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton7)
                         .addGap(18, 18, 18)
+                        .addComponent(jButton7)
+                        .addGap(12, 12, 12)
                         .addComponent(jButton8))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jButton9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(12, 12, 12)
                         .addComponent(importButton)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton11)))
                 .addContainerGap(38, Short.MAX_VALUE))
         );
@@ -351,7 +360,7 @@ public class MainFrame extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -366,8 +375,8 @@ public class MainFrame extends javax.swing.JFrame {
                             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(graphTypeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(weightLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(weightLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(graphTypeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(107, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -398,26 +407,61 @@ public class MainFrame extends javax.swing.JFrame {
 
         jMenu3.setText("Algorithms");
 
-        jMenuItem1.setText("Distance");
-        jMenu3.add(jMenuItem1);
-
-        distanceAlg.setText("Rank");
+        distanceAlg.setText("Distance");
+        distanceAlg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                performDistanceAlg(evt);
+            }
+        });
         jMenu3.add(distanceAlg);
 
-        jMenuItem5.setText("Tarjan");
-        jMenu3.add(jMenuItem5);
+        rankAlg.setText("Rank");
+        rankAlg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                performRankAlg(evt);
+            }
+        });
+        jMenu3.add(rankAlg);
 
-        jMenuItem2.setText("Dijkstra");
-        jMenu3.add(jMenuItem2);
+        tarjanAlg.setText("Tarjan");
+        tarjanAlg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                performTarjanAlg(evt);
+            }
+        });
+        jMenu3.add(tarjanAlg);
 
-        jMenuItem3.setText("Danzig");
-        jMenu3.add(jMenuItem3);
+        dijkstraAlg.setText("Dijkstra");
+        dijkstraAlg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                performDijkstraAlg(evt);
+            }
+        });
+        jMenu3.add(dijkstraAlg);
 
-        jMenuItem4.setText("Prufer");
-        jMenu3.add(jMenuItem4);
+        danzigAlg.setText("Danzig");
+        danzigAlg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                performDanzigAlg(evt);
+            }
+        });
+        jMenu3.add(danzigAlg);
 
-        jMenuItem6.setText("Schedule Manager");
-        jMenu3.add(jMenuItem6);
+        pruferAlg.setText("Prufer");
+        pruferAlg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                performPruferAlg(evt);
+            }
+        });
+        jMenu3.add(pruferAlg);
+
+        scheduleManagerAlg.setText("Schedule Manager");
+        scheduleManagerAlg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                performScheduleManagerAlg(evt);
+            }
+        });
+        jMenu3.add(scheduleManagerAlg);
 
         jMenuItem7.setText("Kruskal");
         jMenu3.add(jMenuItem7);
@@ -464,6 +508,7 @@ public class MainFrame extends javax.swing.JFrame {
             if (selectedGraph != null) {
                 updateGraphDetailsUI(selectedGraph);
                 graphOps.setCurrentGraph(selectedGraph);
+                GraphAlg.setCurrentGraph(selectedGraph);
             }
         }
     }//GEN-LAST:event_graphListValueChanged
@@ -487,6 +532,34 @@ public class MainFrame extends javax.swing.JFrame {
     private void showWeightMat(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showWeightMat
         graphOps.performWeightMatrixOperation();
     }//GEN-LAST:event_showWeightMat
+
+    private void performDistanceAlg(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_performDistanceAlg
+        GraphAlg.performDistanceAlg();
+    }//GEN-LAST:event_performDistanceAlg
+
+    private void performRankAlg(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_performRankAlg
+        GraphAlg.performRankAlg();
+    }//GEN-LAST:event_performRankAlg
+
+    private void performTarjanAlg(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_performTarjanAlg
+        GraphAlg.performTarjanAlg();
+    }//GEN-LAST:event_performTarjanAlg
+
+    private void performDijkstraAlg(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_performDijkstraAlg
+        GraphAlg.performDijkstraAlg();
+    }//GEN-LAST:event_performDijkstraAlg
+
+    private void performDanzigAlg(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_performDanzigAlg
+        GraphAlg.performDanzigAlg();
+    }//GEN-LAST:event_performDanzigAlg
+
+    private void performPruferAlg(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_performPruferAlg
+       GraphAlg.performPruferAlg();
+    }//GEN-LAST:event_performPruferAlg
+
+    private void performScheduleManagerAlg(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_performScheduleManagerAlg
+        GraphAlg.performScheduleManagerAlg();
+    }//GEN-LAST:event_performScheduleManagerAlg
 
     /**
      * @param args the command line arguments
@@ -529,8 +602,10 @@ public class MainFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton adjMatrixButton;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JMenuItem danzigAlg;
     private javax.swing.JButton ddeButton;
     private javax.swing.JButton ddiButton;
+    private javax.swing.JMenuItem dijkstraAlg;
     private javax.swing.JMenuItem distanceAlg;
     private javax.swing.JButton fpAppButton;
     private javax.swing.JButton fsApsButton;
@@ -553,12 +628,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -569,6 +638,10 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel numberOfEdgesLabel;
     private javax.swing.JLabel numberOfVerticesLabel;
+    private javax.swing.JMenuItem pruferAlg;
+    private javax.swing.JMenuItem rankAlg;
+    private javax.swing.JMenuItem scheduleManagerAlg;
+    private javax.swing.JMenuItem tarjanAlg;
     private javax.swing.JLabel weightLabel;
     private javax.swing.JButton weightMatButton;
     // End of variables declaration//GEN-END:variables

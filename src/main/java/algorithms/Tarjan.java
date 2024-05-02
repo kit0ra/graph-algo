@@ -8,7 +8,6 @@ import graphs.Graph;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Stack;
 
 /**
  *
@@ -67,13 +66,12 @@ public class Tarjan {
         return components;
     }
     
-     public List<List<Integer>> findStronglyConnectedComponents() {
+     public void findStronglyConnectedComponents() {
         for (int i = 1; i <= graph.getVertices(); i++) {
             if (ids[i] == -1) {
                 traverse(i);
             }
         }
-        return components;
     }
 
 

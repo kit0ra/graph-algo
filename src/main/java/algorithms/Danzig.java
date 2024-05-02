@@ -10,11 +10,10 @@ package algorithms;
  */
 public class Danzig {
 
-    private int[][] finalMatrix;  // Member to store the final matrix
-
-    public void calculateShortestPath(int[][] weightMatrix) {
+    public static double [][] calculateShortestPath(double[][] weightMatrix) {
+        double[][] finalMatrix;
         int n = weightMatrix.length - 1;  // Assuming weightMatrix[0][0] is the number of vertices
-        finalMatrix = new int[n + 1][n + 1];  // Initialize the final matrix
+        finalMatrix = new double[n + 1][n + 1];  // Initialize the final matrix
 
         // Copy initial weights to finalMatrix
         for (int i = 1; i <= n; i++) {
@@ -32,9 +31,10 @@ public class Danzig {
                 }
             }
         }
+        return finalMatrix;
     }
 
-    public void printMatrix() {
+    public static void printMatrix(double [][] finalMatrix) {
         for (int i = 1; i < finalMatrix.length; i++) {
             for (int j = 1; j < finalMatrix[i].length; j++) {
                 System.out.print((finalMatrix[i][j] == (Integer.MAX_VALUE / 2) ? "infinite" : finalMatrix[i][j])+" ");

@@ -8,8 +8,8 @@ package algorithms;
  *
  * @author Administrator
  */
-import hepers.Task;
-import hepers.TaskManager;
+import helpers.Task;
+import helpers.TaskManager;
 import java.util.ArrayList;
 
 import java.util.List;

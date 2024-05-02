@@ -10,7 +10,7 @@ import java.util.Arrays;
  *
  * @author Administrator
  */
-public class GraphTraversal {
+public class Distance {
     public static int[] distance(int[] fs, int[] aps) {
         int nb_som = aps[0];
         int[] dist = new int[nb_som + 1]; 

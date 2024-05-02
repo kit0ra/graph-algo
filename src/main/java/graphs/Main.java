@@ -5,10 +5,10 @@ package graphs;
 
 import algorithms.Kruskal;
 import algorithms.ScheduleManager;
-import hepers.KruskalEdge;
-import hepers.KruskalGraph;
-import hepers.Task;
-import hepers.TaskManager;
+import helpers.KruskalEdge;
+import helpers.KruskalGraph;
+import helpers.Task;
+import helpers.TaskManager;
 import io.GraphData;
 import io.GraphDataParser;
 
