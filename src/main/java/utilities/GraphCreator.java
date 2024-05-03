@@ -13,6 +13,7 @@ import java.util.Map;
 import graphs.Graph;
 import io.GraphData;
 import graphs.WeightedGraph;
+import java.util.HashMap;
 
 public class GraphCreator {
 
@@ -54,4 +55,19 @@ public class GraphCreator {
             return new Graph(fs, aps);
         }
     }
+
+    public static GraphData convertToGraphData(Graph graph) {
+        Map<String, Map<String, Double>> edges = new HashMap<>();
+        // Similar logic as above to build edges map from graph's internal structure
+
+        return new GraphData(
+                graph.getName(),
+                graph.getType(),
+                graph.isWeighted(),
+                graph.getVertices(),
+                graph.getEdges(),
+                edges
+        );
+    }
+
 }

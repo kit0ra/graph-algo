@@ -85,10 +85,10 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
+        deleteGraphButton = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         importButton = new javax.swing.JButton();
-        jButton11 = new javax.swing.JButton();
+        exportGraphButton = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         fsApsButton = new javax.swing.JButton();
@@ -116,7 +116,7 @@ public class MainFrame extends javax.swing.JFrame {
         danzigAlg = new javax.swing.JMenuItem();
         pruferAlg = new javax.swing.JMenuItem();
         scheduleManagerAlg = new javax.swing.JMenuItem();
-        jMenuItem7 = new javax.swing.JMenuItem();
+        kruskalAlg = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
 
@@ -163,7 +163,12 @@ public class MainFrame extends javax.swing.JFrame {
 
         jButton7.setText("Edit");
 
-        jButton8.setText("Delete");
+        deleteGraphButton.setText("Delete");
+        deleteGraphButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                performDeleteGraph(evt);
+            }
+        });
 
         jButton9.setText("create (I)");
 
@@ -174,7 +179,12 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton11.setText("export");
+        exportGraphButton.setText("export");
+        exportGraphButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                performExportGraph(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -188,13 +198,13 @@ public class MainFrame extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jButton7)
                         .addGap(12, 12, 12)
-                        .addComponent(jButton8))
+                        .addComponent(deleteGraphButton))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jButton9)
                         .addGap(12, 12, 12)
                         .addComponent(importButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton11)))
+                        .addComponent(exportGraphButton)))
                 .addContainerGap(38, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
@@ -204,12 +214,12 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton6)
                     .addComponent(jButton7)
-                    .addComponent(jButton8))
+                    .addComponent(deleteGraphButton))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton9)
                     .addComponent(importButton)
-                    .addComponent(jButton11))
+                    .addComponent(exportGraphButton))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
@@ -463,8 +473,13 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jMenu3.add(scheduleManagerAlg);
 
-        jMenuItem7.setText("Kruskal");
-        jMenu3.add(jMenuItem7);
+        kruskalAlg.setText("Kruskal");
+        kruskalAlg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                performKruskalAlg(evt);
+            }
+        });
+        jMenu3.add(kruskalAlg);
 
         jMenuBar1.add(jMenu3);
 
@@ -561,6 +576,21 @@ public class MainFrame extends javax.swing.JFrame {
         GraphAlg.performScheduleManagerAlg();
     }//GEN-LAST:event_performScheduleManagerAlg
 
+    private void performKruskalAlg(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_performKruskalAlg
+        // TODO add your handling code here:
+        GraphAlg.performKruskalAlg();
+    }//GEN-LAST:event_performKruskalAlg
+
+    private void performExportGraph(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_performExportGraph
+        // TODO add your handling code here:
+        graphOps.performExportGraph();
+    }//GEN-LAST:event_performExportGraph
+
+    private void performDeleteGraph(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_performDeleteGraph
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_performDeleteGraph
+
     /**
      * @param args the command line arguments
      */
@@ -605,19 +635,19 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem danzigAlg;
     private javax.swing.JButton ddeButton;
     private javax.swing.JButton ddiButton;
+    private javax.swing.JButton deleteGraphButton;
     private javax.swing.JMenuItem dijkstraAlg;
     private javax.swing.JMenuItem distanceAlg;
+    private javax.swing.JButton exportGraphButton;
     private javax.swing.JButton fpAppButton;
     private javax.swing.JButton fsApsButton;
     private javax.swing.JLabel graphCount;
     private javax.swing.JList<String> graphList;
     private javax.swing.JLabel graphTypeLabel;
     private javax.swing.JButton importButton;
-    private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -628,7 +658,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -636,6 +665,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JMenuItem kruskalAlg;
     private javax.swing.JLabel numberOfEdgesLabel;
     private javax.swing.JLabel numberOfVerticesLabel;
     private javax.swing.JMenuItem pruferAlg;

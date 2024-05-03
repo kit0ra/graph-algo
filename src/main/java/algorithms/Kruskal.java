@@ -29,6 +29,22 @@ public class Kruskal {
     public KruskalGraph getMst(){
         return mst;
     }
+
+    public int[] getCfc() {
+        return cfc;
+    }
+
+    public int[] getPrem() {
+        return prem;
+    }
+
+    public int[] getNb() {
+        return nb;
+    }
+
+    public int[] getPilch() {
+        return pilch;
+    }
     
     private void init() {
         int nbVertices = myGraph.getNumberOfVertices();

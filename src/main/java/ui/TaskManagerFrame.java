@@ -242,7 +242,6 @@ public class TaskManagerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_performAddTask
 
     private void calculateCriticalPath(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateCriticalPath
-
         if (manager.getTaskByName("FT") == null) {
             //add task ft // update list
             List<Task> predsForFT = new ArrayList<>();
@@ -265,7 +264,39 @@ public class TaskManagerFrame extends javax.swing.JFrame {
         schedule.calculateEarliestStartForTasks();
         schedule.calculateLatestStartForTasks();
         schedule.calculateCriticalTasks();
-        schedule.findAllCriticalPaths();
+        List<List<Task>> criticalPaths = schedule.getPossiblePaths();  // This should return a list of paths, each path being a list of tasks.
+
+// Prepare the result string
+        StringBuilder resultBuilder = new StringBuilder();
+        resultBuilder.append("Critical Path Analysis Results:\n");
+        resultBuilder.append("Earliest Start Times:\n");
+        for (Task task : manager.getTasks()) {
+            resultBuilder.append(task.getName()).append(": ").append(task.getEarliestStart()).append("\n");
+        }
+        resultBuilder.append("\nLatest Start Times:\n");
+        for (Task task : manager.getTasks()) {
+            resultBuilder.append(task.getName()).append(": ").append(task.getLatestStart()).append("\n");
+        }
+        resultBuilder.append("\nCritical Tasks:\n");
+        for (Task task : schedule.getCriticalTasks()) {
+            resultBuilder.append(task.getName()).append("\n");
+        }
+
+// Format and append the critical paths to the result
+        resultBuilder.append("\nCritical Paths:\n");
+        int pathIndex = 1;
+        for (List<Task> path : criticalPaths) {
+            resultBuilder.append("Path ").append(pathIndex++).append(": ");
+            for (Task task : path) {
+                resultBuilder.append(task.getName()).append(" -> ");
+            }
+            resultBuilder.delete(resultBuilder.length() - 4, resultBuilder.length()); // Remove the last arrow
+            resultBuilder.append("\n");
+        }
+
+// Display the results in a JOptionPane
+        JOptionPane.showMessageDialog(null, resultBuilder.toString(), "Critical Path Results", JOptionPane.INFORMATION_MESSAGE);
+
     }//GEN-LAST:event_calculateCriticalPath
 
 

@@ -6,6 +6,7 @@ package operations;
 
 import graphs.Graph;
 import graphs.WeightedGraph;
+import io.GraphDataWriter;
 import javax.swing.JOptionPane;
 import utilities.GraphConverter;
 import utilities.GraphFormatter;
@@ -90,6 +91,15 @@ public class GraphOperations {
         int[] dde = GraphHelpers.calculateHalfExteriorDegree(currentGraph.getFS(), currentGraph.getAPS());
         String formattedDDE = GraphFormatter.formatDDE(dde);
         JOptionPane.showMessageDialog(null, formattedDDE, "Half Exterior Degree", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void performExportGraph() {
+        if (currentGraph != null) {
+            FileExporter exporter = new FileExporter();
+            exporter.saveGraphToFile(currentGraph.getGraphData());
+        } else {
+            JOptionPane.showMessageDialog(null, "No graph selected.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
 }

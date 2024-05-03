@@ -15,6 +15,7 @@ import graphs.WeightedGraph;
 import helpers.TaskManager;
 import java.awt.EventQueue;
 import javax.swing.JOptionPane;
+import ui.KruskalGraphInputFrame;
 import ui.TaskManagerFrame;
 import utilities.GraphConverter;
 import utilities.GraphDisplay;
@@ -175,23 +176,23 @@ public class GraphAlgorithms {
 
             int[] pruferCode = Prufer.generatePruferCode(adjMatrix);
             GraphDisplay.displayPruferCodeResults(pruferCode);
-            
+
         } else if (choice == 1) { // Decoding
             String pruferCodeInput = JOptionPane.showInputDialog("Enter Prufer code, comma separated:");
             try {
                 int[] pruferCode = parsePruferCode(pruferCodeInput);
                 int[][] decodedMatrix = Prufer.decodePruferCode(pruferCode);
                 GraphDisplay.displayPruferDecodeResults(decodedMatrix);
-                
+
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Invalid Prufer code input. " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
-    
+
     private int[] parsePruferCode(String input) throws NumberFormatException {
         String[] parts = input.split(",");
-        int[] pruferCode = new int[parts.length+1];
+        int[] pruferCode = new int[parts.length + 1];
         pruferCode[0] = parts.length + 2;
         for (int i = 1; i < parts.length; i++) {
             pruferCode[i] = Integer.parseInt(parts[i].trim());
@@ -204,6 +205,11 @@ public class GraphAlgorithms {
             TaskManagerFrame frame = new TaskManagerFrame(taskManager);
             frame.setVisible(true);
         });
+    }
+
+    public void performKruskalAlg() {
+        KruskalGraphInputFrame frame = new KruskalGraphInputFrame();
+        frame.setVisible(true);
     }
 
 }

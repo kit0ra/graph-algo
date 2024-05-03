@@ -27,10 +27,18 @@ public class WeightedGraph extends Graph {
     public double[][] getWeights() {
         return weights.clone();
     }
-
+    
+    public double getWeightForEdge(int from, int to) {
+    // Implement your logic to retrieve the actual weight for the edge, using 'weights' matrix
+    // Assuming 'weights' is correctly initialized and indexed
+        System.out.println("weight of edge "+ from + " to"+ to + " -> "+weights[from-1][to -1]);
+    return weights[from - 1][to - 1]; // Adjust index as necessary
+}
+    
     public void setWeights(double[][] newWeights) {
         this.weights = newWeights.clone();
     }
+
 
     @Override
     public String toString() {
