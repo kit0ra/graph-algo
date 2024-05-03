@@ -55,4 +55,5 @@ public class GraphManager {
     public List<Graph> getGraphs() {
         return graphs;
     }
+    
 }

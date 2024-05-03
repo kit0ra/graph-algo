@@ -6,7 +6,6 @@ package operations;
 
 import graphs.Graph;
 import graphs.WeightedGraph;
-import io.GraphDataWriter;
 import javax.swing.JOptionPane;
 import utilities.GraphConverter;
 import utilities.GraphFormatter;

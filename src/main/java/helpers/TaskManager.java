@@ -8,6 +8,7 @@ package helpers;
  *
  * @author Administrator
  */
+import graphs.Graph;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +16,10 @@ import java.util.Map;
 import utilities.GraphPrinter;
 
 public class TaskManager {
+
+    public static void deleteGraph(Graph selectedGraph) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
     public List<Task> tasks;
     private Map<String, Task> taskMap;

@@ -9,7 +9,10 @@ import helpers.TaskManager;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import operations.FileExporter;
 import operations.FileImporter;
 import operations.GraphAlgorithms;
 import operations.GraphManager;
@@ -22,7 +25,7 @@ import operations.GraphOperations;
 public class MainFrame extends javax.swing.JFrame {
 
     private GraphOperations graphOps;
-    private GraphManager graphManager;
+    private static GraphManager graphManager;
     private GraphAlgorithms GraphAlg;
 
     /**
@@ -47,14 +50,6 @@ public class MainFrame extends javax.swing.JFrame {
     // Field to hold the list model
     private void setupListSelectionListener() {
         graphList.addListSelectionListener(this::graphListValueChanged);
-    }
-
-    private void updateGraphDetailsUI(Graph graph) {
-        numberOfVerticesLabel.setText("" + graph.getVertices()); // Update with actual methods
-        numberOfEdgesLabel.setText("" + graph.getEdges());
-        graphTypeLabel.setText("" + (graph.getType() ? "orienter" : "non-orienter"));
-        weightLabel.setText("" + (graph.isWeighted()? "oui" : "non"));
-        System.out.println("" + graph.getName());
     }
 
     private void updateGraphListUI() {
@@ -83,7 +78,7 @@ public class MainFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         graphList = new javax.swing.JList<>();
         jPanel6 = new javax.swing.JPanel();
-        jButton6 = new javax.swing.JButton();
+        createGraphButton = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         deleteGraphButton = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
@@ -118,7 +113,7 @@ public class MainFrame extends javax.swing.JFrame {
         scheduleManagerAlg = new javax.swing.JMenuItem();
         kruskalAlg = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
-        jMenu4 = new javax.swing.JMenu();
+        aboutButton = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -159,7 +154,12 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel6.setBackground(new java.awt.Color(221, 221, 221));
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "operations", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
-        jButton6.setText("create");
+        createGraphButton.setText("create");
+        createGraphButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                performCreateGraph(evt);
+            }
+        });
 
         jButton7.setText("Edit");
 
@@ -194,7 +194,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jButton6)
+                        .addComponent(createGraphButton)
                         .addGap(18, 18, 18)
                         .addComponent(jButton7)
                         .addGap(12, 12, 12)
@@ -212,7 +212,7 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton6)
+                    .addComponent(createGraphButton)
                     .addComponent(jButton7)
                     .addComponent(deleteGraphButton))
                 .addGap(18, 18, 18)
@@ -486,8 +486,13 @@ public class MainFrame extends javax.swing.JFrame {
         jMenu5.setText("Example");
         jMenuBar1.add(jMenu5);
 
-        jMenu4.setText("About");
-        jMenuBar1.add(jMenu4);
+        aboutButton.setText("About");
+        aboutButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                performShowAbout(evt);
+            }
+        });
+        jMenuBar1.add(aboutButton);
 
         setJMenuBar(jMenuBar1);
 
@@ -521,7 +526,7 @@ public class MainFrame extends javax.swing.JFrame {
             Graph selectedGraph = graphManager.getGraph(selectedGraphName); // Assuming you have a method to fetch Graph
 
             if (selectedGraph != null) {
-                updateGraphDetailsUI(selectedGraph);
+                updateGraphListUI();
                 graphOps.setCurrentGraph(selectedGraph);
                 GraphAlg.setCurrentGraph(selectedGraph);
             }
@@ -569,7 +574,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_performDanzigAlg
 
     private void performPruferAlg(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_performPruferAlg
-       GraphAlg.performPruferAlg();
+        GraphAlg.performPruferAlg();
     }//GEN-LAST:event_performPruferAlg
 
     private void performScheduleManagerAlg(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_performScheduleManagerAlg
@@ -588,8 +593,45 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void performDeleteGraph(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_performDeleteGraph
         // TODO add your handling code here:
-        
+        String selectedGraphName = graphList.getSelectedValue();
+        Graph selectedGraph = graphManager.getGraph(selectedGraphName);
+
+        if (selectedGraph != null) {
+            graphManager.removeGraph(selectedGraphName);
+            updateGraphListUI();
+        } else {
+            JOptionPane.showMessageDialog(null, "No graph selected.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_performDeleteGraph
+    // Static method to add graph and update UI
+    public static void addGraphToManager(Graph graph) {
+        graphManager.addGraph(graph);
+        SwingUtilities.invokeLater(() -> {
+            if (JFrame.getFrames().length > 0 && JFrame.getFrames()[0] instanceof MainFrame) {
+                ((MainFrame) JFrame.getFrames()[0]).updateGraphListUI();
+            }
+        });
+    }
+
+    private void performCreateGraph(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_performCreateGraph
+        SwingUtilities.invokeLater(() -> {
+            GraphCreationFrame frame = new GraphCreationFrame();
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setVisible(true);
+        });
+    }//GEN-LAST:event_performCreateGraph
+
+    private void performShowAbout(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_performShowAbout
+        // TODO add your handling code here:
+
+        // Display about information in a JOptionPane dialog
+        String aboutText = """
+                       University of Upper-Alsace
+                       Project: Graph Algorithms 2024
+                       Made by: AIT OUBELLI, ROUAMI""";
+
+    JOptionPane.showMessageDialog(null, aboutText, "About", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_performShowAbout
 
     /**
      * @param args the command line arguments
@@ -630,8 +672,10 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu aboutButton;
     private javax.swing.JButton adjMatrixButton;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton createGraphButton;
     private javax.swing.JMenuItem danzigAlg;
     private javax.swing.JButton ddeButton;
     private javax.swing.JButton ddiButton;
@@ -646,7 +690,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel graphTypeLabel;
     private javax.swing.JButton importButton;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
@@ -655,7 +698,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
